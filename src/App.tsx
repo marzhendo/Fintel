@@ -4,7 +4,26 @@ import { useStore, Transaction, BalanceResult, Category } from "./store";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { AIChat } from "./components/AIChat";
 import { Settings } from "./components/Settings";
+import { ConfirmationModal } from "./components/ConfirmationModal";
+import { Toast, useToast } from "./components/Toast";
 import "./App.css";
+
+// Tipe untuk state modal konfirmasi generik
+interface ConfirmState {
+  isOpen: boolean;
+  title: string;
+  description?: string;
+  confirmLabel?: string;
+  confirmVariant?: "danger" | "primary";
+  requireTyping?: string;
+  onConfirm: () => void;
+}
+
+const DEFAULT_CONFIRM: ConfirmState = {
+  isOpen: false,
+  title: "",
+  onConfirm: () => {},
+};
 
 function App() {
   const { categories, transactions, balance, budgetStatus, savingGoals, setCategories, setTransactions, setBalance, setBudgetStatus, setSavingGoals, refreshFlag, fintelAdvice, setFintelAdvice } = useStore();
@@ -15,12 +34,15 @@ function App() {
   const [filterType, setFilterType] = useState<string>("all");
   const [filterStartDate, setFilterStartDate] = useState<string>("");
   const [filterEndDate, setFilterEndDate] = useState<string>("");
-  
-  const [toastMessage, setToastMessage] = useState("");
-  
+
+  // State untuk ConfirmationModal
+  const [confirmState, setConfirmState] = useState<ConfirmState>(DEFAULT_CONFIRM);
 
   const [chartData, setChartData] = useState<any[]>([]);
   const [chartPeriod, setChartPeriod] = useState<"daily" | "monthly">("daily");
+
+  // Toast notifications (menggantikan semua alert() dan toastMessage lama)
+  const { toasts, showToast, dismissToast } = useToast();
 
   const fetchData = async () => {
     try {
@@ -41,7 +63,6 @@ function App() {
       const bs = await invoke<any>("get_budget_status", { currentMonth });
       setBudgetStatus(bs);
       
-
       const cData = await invoke<any[]>("get_chart_data", { currentDate: currentMonth, periodType: chartPeriod });
       setChartData(cData);
     } catch (e) {
@@ -51,10 +72,12 @@ function App() {
 
   useEffect(() => { fetchData(); }, [filterType, filterStartDate, filterEndDate, chartPeriod, refreshFlag]);
 
-  const showToast = (msg: string) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(""), 3000);
+  /** Helper: tampilkan ConfirmationModal dan tunggu pilihan user */
+  const openConfirm = (opts: Omit<ConfirmState, "isOpen">) => {
+    setConfirmState({ ...opts, isOpen: true });
   };
+
+  const closeConfirm = () => setConfirmState(DEFAULT_CONFIRM);
 
   const checkBudgetAlerts = (newTxAmount: number, categoryId: number) => {
     if (!budgetStatus) return;
@@ -68,11 +91,9 @@ function App() {
     else if (cat.group_type === "savings") { currentSpent = budgetStatus.real.savings_amount; ideal = budgetStatus.ideal.savings; }
     
     if (currentSpent + newTxAmount > ideal && ideal > 0) {
-      showToast(`Warning: Category ${cat.group_type} has exceeded its 100% allocation!`);
+      showToast(`Peringatan: Kategori "${cat.group_type}" telah melampaui alokasi 100%!`, "warning");
     }
   };
-
-  
 
   const openNewTransaction = () => {
     setEditingId(null);
@@ -125,18 +146,48 @@ function App() {
       setShowModal(false);
       fetchData();
     } catch (e) {
-      alert(String(e));
+      showToast("Gagal menyimpan transaksi: " + String(e), "error");
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm("Delete transaction?")) return;
-    try {
-      await invoke("delete_transaction", { id });
-      fetchData();
-    } catch (e) {
-      alert(String(e));
-    }
+  /** Hapus transaksi — tampilkan ConfirmationModal, bukan window.confirm() */
+  const handleDelete = (id: number) => {
+    openConfirm({
+      title: "Yakin mau hapus transaksi ini?",
+      description: "Transaksi yang sudah dihapus tidak bisa dikembalikan lagi.",
+      confirmLabel: "Ya, Hapus",
+      confirmVariant: "danger",
+      onConfirm: async () => {
+        closeConfirm();
+        try {
+          await invoke("delete_transaction", { id });
+          fetchData();
+          showToast("Transaksi berhasil dihapus.", "success");
+        } catch (e) {
+          showToast("Gagal menghapus transaksi: " + String(e), "error");
+        }
+      },
+    });
+  };
+
+  /** Hapus saving goal */
+  const handleDeleteGoal = (goalId: number, goalName: string) => {
+    openConfirm({
+      title: `Hapus target "${goalName}"?`,
+      description: "Data progres tabungan untuk target ini akan ikut terhapus.",
+      confirmLabel: "Ya, Hapus",
+      confirmVariant: "danger",
+      onConfirm: async () => {
+        closeConfirm();
+        try {
+          await invoke("delete_saving_goal", { id: goalId });
+          fetchData();
+          showToast(`Target "${goalName}" berhasil dihapus.`, "success");
+        } catch (e) {
+          showToast("Gagal menghapus target tabungan: " + String(e), "error");
+        }
+      },
+    });
   };
 
   return (
@@ -194,7 +245,24 @@ function App() {
                   <span className="material-symbols-rounded text-blue-500">flag</span>
                   Target Tabungan
                 </h3>
-                <button onClick={async () => { const name = prompt('Nama Target Tabungan:'); if (!name) return; const target = prompt('Target Nominal (Rp):'); if (!target) return; try { await invoke('create_saving_goal', { name, targetAmount: parseInt(target), targetDate: null }); fetchData(); } catch(e) { alert(String(e)) } }} className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold ml-auto">+ New Goal</button>
+                <button
+                  onClick={async () => {
+                    const name = prompt('Nama Target Tabungan:');
+                    if (!name) return;
+                    const target = prompt('Target Nominal (Rp):');
+                    if (!target) return;
+                    try {
+                      await invoke('create_saving_goal', { name, targetAmount: parseInt(target), targetDate: null });
+                      fetchData();
+                      showToast(`Target "${name}" berhasil dibuat! 🎯`, "success");
+                    } catch(e) {
+                      showToast("Gagal membuat target: " + String(e), "error");
+                    }
+                  }}
+                  className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-bold ml-auto"
+                >
+                  + New Goal
+                </button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {savingGoals.map(goal => {
@@ -205,7 +273,12 @@ function App() {
                         <span className="font-bold">{goal.name}</span>
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-bold text-blue-600">{pct.toFixed(0)}%</span>
-                          <button onClick={async () => { if(confirm('Delete goal?')) { await invoke('delete_saving_goal', { id: goal.id }); fetchData(); } }} className="text-red-500"><span className="material-symbols-rounded text-sm">delete</span></button>
+                          <button
+                            onClick={() => handleDeleteGoal(goal.id, goal.name)}
+                            className="text-red-400 hover:text-red-600 transition-colors"
+                          >
+                            <span className="material-symbols-rounded text-sm">delete</span>
+                          </button>
                         </div>
                       </div>
                       <div className="w-full bg-blue-100 rounded-full h-2 mb-2">
@@ -445,21 +518,35 @@ function App() {
           </div>
         )}
 
-        {activeTab === "Settings" && <Settings />}
+        {activeTab === "Settings" && (
+          <Settings
+            showToast={showToast}
+            openConfirm={openConfirm}
+            closeConfirm={closeConfirm}
+          />
+        )}
 
           {activeTab === "AI Chat" && (
           <div className="h-full">
-            <AIChat />
+            <AIChat showToast={showToast} />
           </div>
         )}
       </main>
 
-      {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed top-8 right-8 bg-red-500 text-white px-6 py-3 rounded-lg shadow-xl font-bold z-50 animate-bounce">
-          {toastMessage}
-        </div>
-      )}
+      {/* Toast Notifications (menggantikan toastMessage lama) */}
+      <Toast toasts={toasts} onDismiss={dismissToast} />
+
+      {/* ConfirmationModal (menggantikan semua window.confirm()) */}
+      <ConfirmationModal
+        isOpen={confirmState.isOpen}
+        title={confirmState.title}
+        description={confirmState.description}
+        confirmLabel={confirmState.confirmLabel}
+        confirmVariant={confirmState.confirmVariant}
+        requireTyping={confirmState.requireTyping}
+        onConfirm={confirmState.onConfirm}
+        onCancel={closeConfirm}
+      />
 
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -516,11 +603,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-

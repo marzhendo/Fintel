@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { useStore } from "../store";
 
-export function AIChat() {
+export function AIChat({ showToast }: { showToast: (m: string, v?: "success"|"error") => void }) {
   const [ollamaReady, setOllamaReady] = useState<boolean | null>(null);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<{sender: "user" | "ai", text: string, parsed?: any}[]>([]);
@@ -62,7 +62,7 @@ export function AIChat() {
         return next;
       });
     } catch(e) {
-      alert("Failed to save: " + e);
+      showToast("Failed to save: " + e, "error");
     }
   };
 

@@ -1,8 +1,16 @@
 import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { useStore } from "../store";
+import { ToastVariant } from "./Toast";
 
-export function Settings() {
+// Props yang diteruskan dari App.tsx supaya Settings bisa pakai toast & modal global
+interface SettingsProps {
+  showToast: (message: string, variant?: ToastVariant, duration?: number) => number;
+  openConfirm: (opts: Omit<{ isOpen: boolean; title: string; description?: string; confirmLabel?: string; confirmVariant?: "danger" | "primary"; requireTyping?: string; onConfirm: () => void }, "isOpen">) => void;
+  closeConfirm: () => void;
+}
+
+export function Settings({ showToast, openConfirm, closeConfirm }: SettingsProps) {
   const { triggerRefresh, budgetStatus } = useStore();
   const [models, setModels] = useState<string[]>([]);
   const [selectedModel, setSelectedModel] = useState<string>("llama3.2:3b");
@@ -18,26 +26,40 @@ export function Settings() {
     try {
       await invoke("set_monthly_income", { amount: parseInt(income) });
       triggerRefresh();
-      alert("Income updated!");
-    } catch (e) { alert(String(e)); }
+      showToast("Pendapatan bulanan berhasil disimpan! 💰", "success");
+    } catch (e) {
+      showToast("Gagal menyimpan pendapatan: " + String(e), "error");
+    }
   };
 
   const handleSaveModel = async () => {
     try {
       await invoke("set_ollama_model", { model: selectedModel });
-      alert("Model updated!");
-    } catch (e) { alert(String(e)); }
+      showToast(`Model AI diperbarui ke "${selectedModel}". ✨`, "success");
+    } catch (e) {
+      showToast("Gagal memperbarui model: " + String(e), "error");
+    }
   };
 
-  const handleReset = async () => {
-    const confirmation = prompt("Ketik 'RESET' untuk menghapus semua data transaksi dan mereset tabungan:");
-    if (confirmation === "RESET") {
-      try {
-        await invoke("reset_all_data");
-        triggerRefresh();
-        alert("Semua data berhasil direset!");
-      } catch (e) { alert(String(e)); }
-    }
+  const handleReset = () => {
+    openConfirm({
+      title: "Reset semua data?",
+      description:
+        "Tindakan ini akan menghapus SELURUH data transaksi, riwayat, dan target tabungan Anda secara permanen. Ini tidak bisa dibatalkan.",
+      confirmLabel: "Ya, Reset Sekarang",
+      confirmVariant: "danger",
+      requireTyping: "RESET",
+      onConfirm: async () => {
+        closeConfirm();
+        try {
+          await invoke("reset_all_data");
+          triggerRefresh();
+          showToast("Semua data berhasil direset.", "info");
+        } catch (e) {
+          showToast("Gagal mereset data: " + String(e), "error");
+        }
+      },
+    });
   };
 
   return (
@@ -64,10 +86,16 @@ export function Settings() {
 
       <section className="bg-red-50 p-6 rounded-xl shadow-md border border-red-200 mt-12">
         <h3 className="font-bold text-red-600 mb-2">Danger Zone</h3>
-        <p className="text-sm text-red-500 mb-4">Tindakan ini akan menghapus seluruh data transaksi Anda secara permanen. Tidak dapat dibatalkan.</p>
-        <button onClick={handleReset} className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold">Reset Semua Data</button>
+        <p className="text-sm text-red-500 mb-4">
+          Tindakan ini akan menghapus seluruh data transaksi Anda secara permanen. Tidak dapat dibatalkan.
+        </p>
+        <button
+          onClick={handleReset}
+          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold transition-colors"
+        >
+          Reset Semua Data
+        </button>
       </section>
     </div>
   );
 }
-

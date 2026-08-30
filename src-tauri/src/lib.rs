@@ -214,6 +214,10 @@ fn generate_fintel_advice(state: tauri::State<DbState>, current_month: &str) -> 
     let ideal = budget_engine::calculate_ideal_allocation(settings.monthly_income, &settings.ratios);
     let real = budget_engine::calculate_realization(&txs, &categories);
     
+    let needs_pct = if ideal.needs > 0 { (real.needs_spent as f64 / ideal.needs as f64) * 100.0 } else { 0.0 };
+    let wants_pct = if ideal.wants > 0 { (real.wants_spent as f64 / ideal.wants as f64) * 100.0 } else { 0.0 };
+    let savings_pct = if ideal.savings > 0 { (real.savings_amount as f64 / ideal.savings as f64) * 100.0 } else { 0.0 };
+    
     // Format numbers to readable Rupiah strings to prevent LLM hallucinations with zeros
     use serde_json::json;
     let formatted_data = json!({
@@ -227,6 +231,11 @@ fn generate_fintel_advice(state: tauri::State<DbState>, current_month: &str) -> 
             "kebutuhan_pokok": format_rupiah(real.needs_spent),
             "keinginan": format_rupiah(real.wants_spent),
             "tabungan_terkumpul": format_rupiah(real.savings_amount)
+        },
+        "persentase_terpakai": {
+            "kebutuhan_pokok": format!("{:.0}%", needs_pct),
+            "keinginan": format!("{:.0}%", wants_pct),
+            "tabungan_terkumpul": format!("{:.0}%", savings_pct)
         }
     });
 
