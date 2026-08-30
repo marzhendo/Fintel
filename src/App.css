@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #FCFAF8;
+  --color-surface-dim: #E8E5E1;
+  --color-surface-bright: #FCFAF8;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #F5F7F5;
+  --color-surface-container: #EBF1EB;
+  --color-surface-container-high: #E1EBE2;
+  --color-surface-container-highest: #D7E5D9;
+  --color-on-surface: #0b1c30;
+  --color-on-surface-variant: #3d4a42;
+  --color-primary: #006948;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #00855d;
+  --color-on-primary-container: #f5fff7;
+  --color-secondary: #6b38d4;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #8455ef;
+  --color-on-secondary-container: #fffbff;
+  --color-tertiary: #0058be;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #2170e4;
+  
+  --font-headline-lg: "Plus Jakarta Sans", sans-serif;
+  --font-headline-md: "Plus Jakarta Sans", sans-serif;
+  --font-label-md: "Inter", sans-serif;
+  --font-label-sm: "Inter", sans-serif;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.08);
+  --color-red-500: #ff8a8a;
+  --color-red-100: #ffebeb;
+  --color-yellow-500: #ffd166;
+  --color-yellow-100: #fff6de;
+  --color-green-500: #64d28e;
+  --color-green-100: #e3f7eb;
+}
+
+
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.06);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.08);
+  --color-red-500: #ff8a8a;
+  --color-red-100: #ffebeb;
+  --color-yellow-500: #ffd166;
+  --color-yellow-100: #fff6de;
+  --color-green-500: #64d28e;
+  --color-green-100: #e3f7eb;
+}
+
+
+

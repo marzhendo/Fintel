@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fintel Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#6b38d4",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#68dba9",
+                        "on-background": "#0b1c30",
+                        "primary-fixed-dim": "#68dba9",
+                        "on-error-container": "#93000a",
+                        "background": "#f8f9ff",
+                        "secondary-container": "#8455ef",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed": "#d8e2ff",
+                        "primary": "#006948",
+                        "tertiary-container": "#2170e4",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#006c4a",
+                        "primary-container": "#00855d",
+                        "on-tertiary-fixed": "#001a42",
+                        "on-secondary-container": "#fffbff",
+                        "inverse-surface": "#213145",
+                        "on-primary-container": "#f5fff7",
+                        "secondary-fixed": "#e9ddff",
+                        "outline": "#6d7a72",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary-container": "#fefcff",
+                        "on-primary-fixed-variant": "#005137",
+                        "on-primary-fixed": "#002114",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "on-secondary": "#ffffff",
+                        "tertiary": "#0058be",
+                        "primary-fixed": "#85f8c4",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container": "#e5eeff",
+                        "surface-bright": "#f8f9ff",
+                        "on-surface-variant": "#3d4a42",
+                        "surface-container-high": "#dce9ff",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#d3e4fe",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "surface-dim": "#cbdbf5",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface": "#f8f9ff",
+                        "on-secondary-fixed": "#23005c",
+                        "outline-variant": "#bccac0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "12px",
+                        "stack-md": "20px",
+                        "gutter": "24px",
+                        "base": "8px",
+                        "stack-lg": "40px",
+                        "container-padding": "32px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .shadow-ambient-card {
+            box-shadow: 0px 4px 20px -5px rgba(0, 105, 72, 0.08);
+        }
+        .ai-gradient-bg {
+            background: linear-gradient(135deg, rgba(132, 85, 239, 0.1) 0%, rgba(33, 112, 228, 0.1) 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex selection:bg-primary-container selection:text-on-primary-container">
+<!-- SideNavBar (Shared Component) -->
+<nav class="hidden md:flex flex-col h-full p-6 space-y-stack-md fixed left-0 top-0 w-[280px] bg-surface-container shadow-md z-40">
+<!-- Header -->
+<div class="flex items-center gap-3 mb-8">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-primary-container flex items-center justify-center text-on-primary-container font-headline-md font-bold">
+                F
+            </div>
+<div>
+<h1 class="font-headline-md text-headline-md font-extrabold text-primary">Fintel</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Financial Wellness</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 space-y-2">
+<!-- Active Tab: AI Chat -->
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-xl font-bold font-label-md text-label-md hover:bg-surface-container-highest transition-all active:scale-[0.98] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                AI Chat
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl font-label-md text-label-md hover:bg-surface-container-highest transition-all active:scale-[0.98] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+                Transactions
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-xl font-label-md text-label-md hover:bg-surface-container-highest transition-all active:scale-[0.98] duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</div>
+<!-- CTA -->
+<button class="w-full py-3 bg-primary text-on-primary rounded-full font-label-md text-label-md hover:bg-surface-tint transition-colors active:scale-[0.98] duration-200 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+            New Transaction
+        </button>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 md:ml-[280px] p-container-padding max-w-[1440px] mx-auto w-full space-y-stack-lg">
+<!-- Header Section -->
+<header class="flex flex-col md:flex-row justify-between items-start md:items-end gap-stack-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary">Overview</h2>
+<div class="mt-4 flex flex-col md:flex-row gap-6">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Total Balance</p>
+<p class="font-display-lg text-display-lg text-on-background">$12,450.00</p>
+</div>
+<div class="md:border-l border-outline-variant md:pl-6">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Monthly Balance</p>
+<p class="font-headline-md text-headline-md text-primary-container">+$2,100.00</p>
+</div>
+</div>
+</div>
+<button class="hidden md:flex py-3 px-6 bg-primary text-on-primary rounded-full font-label-md text-label-md hover:bg-surface-tint transition-colors active:scale-[0.98] duration-200 items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                Add Transaction
+            </button>
+</header>
+<!-- AI Insight Card -->
+<section class="bg-surface shadow-ambient-card rounded-2xl p-gutter ai-gradient-bg border border-tertiary-fixed-dim">
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-secondary font-bold mb-2">AI Insight</h3>
+<p class="font-body-md text-body-md text-on-surface">You've spent 15% less on dining this month. Consider moving that $150 to your 'Holiday' savings goal to reach it 2 weeks earlier!</p>
+<button class="mt-3 font-label-md text-label-md text-secondary hover:text-secondary-container transition-colors flex items-center gap-1">
+                        Move Funds Now <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Budget Trackers (Bento Grid Style) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
+<!-- Needs Card -->
+<div class="bg-surface shadow-ambient-card rounded-2xl p-gutter">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-md text-[20px] text-on-background">Needs</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">70%</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">$1,400 spent of $2,000</p>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 70%;"></div>
+</div>
+</div>
+<!-- Wants Card -->
+<div class="bg-surface shadow-ambient-card rounded-2xl p-gutter">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-md text-[20px] text-on-background">Wants</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">85%</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">$850 spent of $1,000</p>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-[#fbbc04] rounded-full" style="width: 85%;"></div>
+</div>
+</div>
+<!-- Savings Card -->
+<div class="bg-surface shadow-ambient-card rounded-2xl p-gutter border border-error-container">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-md text-[20px] text-on-background">Savings</h3>
+<span class="font-label-sm text-label-sm text-error font-bold">105%</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">$525 saved of $500 goal</p>
+<div class="w-full h-3 bg-error-container rounded-full overflow-hidden">
+<div class="h-full bg-error rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+</section>
+<!-- Charts Layout (Asymmetric) -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-stack-md">
+<!-- Line Chart (Main) -->
+<div class="lg:col-span-2 bg-surface shadow-ambient-card rounded-2xl p-gutter h-[400px] flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-on-background">Income vs Expenses</h3>
+<select class="bg-surface-container border-none rounded-lg font-label-sm text-label-sm text-on-surface focus:ring-1 focus:ring-primary">
+<option>Last 6 Months</option>
+<option>This Year</option>
+</select>
+</div>
+<!-- Placeholder for Chart Graphic to maintain whitespace and layout -->
+<div class="flex-1 relative flex items-end gap-4 pb-8 border-b border-l border-outline-variant px-4">
+<!-- Faux Line Chart Bars for visual representation in HTML -->
+<div class="flex-1 h-[40%] bg-surface-container-highest rounded-t-sm relative group hover:bg-tertiary-fixed transition-colors"><div class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 font-label-sm text-xs bg-inverse-surface text-inverse-on-surface px-2 py-1 rounded">Jan</div></div>
+<div class="flex-1 h-[50%] bg-surface-container-highest rounded-t-sm relative group hover:bg-tertiary-fixed transition-colors"><div class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 font-label-sm text-xs bg-inverse-surface text-inverse-on-surface px-2 py-1 rounded">Feb</div></div>
+<div class="flex-1 h-[45%] bg-surface-container-highest rounded-t-sm relative group hover:bg-tertiary-fixed transition-colors"><div class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 font-label-sm text-xs bg-inverse-surface text-inverse-on-surface px-2 py-1 rounded">Mar</div></div>
+<div class="flex-1 h-[70%] bg-primary-container rounded-t-sm relative group hover:bg-primary transition-colors"><div class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 font-label-sm text-xs bg-inverse-surface text-inverse-on-surface px-2 py-1 rounded">Apr</div></div>
+<div class="flex-1 h-[60%] bg-surface-container-highest rounded-t-sm relative group hover:bg-tertiary-fixed transition-colors"><div class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 font-label-sm text-xs bg-inverse-surface text-inverse-on-surface px-2 py-1 rounded">May</div></div>
+<div class="flex-1 h-[80%] bg-primary-container rounded-t-sm relative group hover:bg-primary transition-colors"><div class="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 font-label-sm text-xs bg-inverse-surface text-inverse-on-surface px-2 py-1 rounded">Jun</div></div>
+</div>
+</div>
+<!-- Donut Chart (Breakdown) -->
+<div class="bg-surface shadow-ambient-card rounded-2xl p-gutter h-[400px] flex flex-col items-center justify-center relative">
+<h3 class="font-headline-md text-headline-md text-on-background absolute top-6 left-6">Expenses</h3>
+<!-- CSS Donut Chart Approximation -->
+<div class="w-48 h-48 rounded-full bg-surface-container-highest relative flex items-center justify-center mt-8" style="background: conic-gradient(#006948 0% 45%, #6b38d4 45% 75%, #fbbc04 75% 100%);">
+<div class="w-32 h-32 bg-surface rounded-full flex flex-col items-center justify-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Total</span>
+<span class="font-headline-md text-[20px] font-bold text-on-background">$2,250</span>
+</div>
+</div>
+<div class="w-full mt-8 space-y-3">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="font-label-sm text-label-sm text-on-surface">Housing</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">45%</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-secondary"></div>
+<span class="font-label-sm text-label-sm text-on-surface">Food</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">30%</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-[#fbbc04]"></div>
+<span class="font-label-sm text-label-sm text-on-surface">Transport</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">25%</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Mobile Floating Action Button (Visible only on mobile since Top Nav Add button handles desktop) -->
+<button class="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:bg-surface-tint active:scale-95 transition-transform z-50">
+<span class="material-symbols-outlined text-2xl" data-icon="add">add</span>
+</button>
+</body></html>

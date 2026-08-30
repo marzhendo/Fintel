@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fintel - AI Chat</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "error": "#ba1a1a",
+                    "surface-dim": "#cbdbf5",
+                    "outline": "#6d7a72",
+                    "on-tertiary-container": "#fefcff",
+                    "secondary-container": "#8455ef",
+                    "on-secondary-container": "#fffbff",
+                    "tertiary-fixed": "#d8e2ff",
+                    "tertiary-fixed-dim": "#adc6ff",
+                    "primary-fixed": "#85f8c4",
+                    "background": "#f8f9ff",
+                    "surface-container": "#e5eeff",
+                    "primary-container": "#00855d",
+                    "surface": "#f8f9ff",
+                    "surface-container-high": "#dce9ff",
+                    "on-secondary-fixed-variant": "#5516be",
+                    "on-tertiary-fixed-variant": "#004395",
+                    "outline-variant": "#bccac0",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#006c4a",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed-dim": "#68dba9",
+                    "surface-bright": "#f8f9ff",
+                    "secondary-fixed-dim": "#d0bcff",
+                    "on-primary-container": "#f5fff7",
+                    "surface-variant": "#d3e4fe",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#2170e4",
+                    "on-secondary-fixed": "#23005c",
+                    "on-surface-variant": "#3d4a42",
+                    "primary": "#006948",
+                    "inverse-primary": "#68dba9",
+                    "on-error": "#ffffff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "inverse-surface": "#213145",
+                    "surface-container-low": "#eff4ff",
+                    "tertiary": "#0058be",
+                    "on-tertiary-fixed": "#001a42",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed": "#002114",
+                    "on-primary-fixed-variant": "#005137",
+                    "secondary-fixed": "#e9ddff",
+                    "on-surface": "#0b1c30",
+                    "error-container": "#ffdad6",
+                    "secondary": "#6b38d4",
+                    "on-tertiary": "#ffffff",
+                    "on-background": "#0b1c30",
+                    "surface-container-highest": "#d3e4fe"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-lg": "40px",
+                    "stack-sm": "12px",
+                    "container-padding": "32px",
+                    "stack-md": "20px",
+                    "gutter": "24px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "headline-lg": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "headline-md": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "label-sm": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "1.3",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "1.5",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "1.4",
+                                    "fontWeight": "500"
+                            }
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md h-screen w-screen overflow-hidden flex">
+<!-- SideNavBar Component -->
+<nav class="hidden md:flex flex-col gap-stack-md p-stack-md h-full border-r border-outline-variant/20 bg-surface-container-low dark:bg-inverse-surface w-[280px] fixed left-0 top-0 shadow-md z-40">
+<!-- Header -->
+<div class="flex items-center gap-base px-4 py-2">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed text-[32px]">spa</span>
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary dark:text-primary-fixed font-bold leading-none">Fintel</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant dark:text-outline-variant mt-1">Financial Wellness</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-base text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest dark:hover:bg-surface-variant rounded-xl transition-all active:scale-98 cursor-pointer" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest dark:hover:bg-surface-variant rounded-xl transition-all active:scale-98 cursor-pointer" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-md text-label-md">Transactions</span>
+</a>
+<!-- Active State Navigation -->
+<a class="flex items-center gap-base text-primary dark:text-primary-fixed font-bold bg-primary-container/10 dark:bg-primary-container/20 rounded-xl px-4 py-3 hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all active:scale-98 cursor-pointer" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-label-md text-label-md">AI Chat</span>
+</a>
+<a class="flex items-center gap-base text-on-surface-variant dark:text-outline-variant px-4 py-3 hover:bg-surface-container-highest dark:hover:bg-surface-variant rounded-xl transition-all active:scale-98 cursor-pointer" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<!-- CTA -->
+<button class="mt-auto w-full flex items-center justify-center gap-2 bg-primary text-on-primary font-label-md text-label-md py-3 rounded-full hover:bg-primary/90 transition-colors shadow-sm active:scale-95">
+<span class="material-symbols-outlined">add</span>
+            New Transaction
+        </button>
+</nav>
+<!-- Main Content Area Wrapper -->
+<div class="flex-1 flex flex-col md:ml-[280px] h-full relative">
+<!-- TopNavBar Component -->
+<header class="flex justify-between items-center px-container-padding w-full sticky top-0 z-50 bg-surface dark:bg-surface-container h-16 shadow-sm transition-colors">
+<!-- Mobile Brand (Hidden on Desktop) -->
+<div class="md:hidden flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[24px]">spa</span>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed font-bold">Fintel</h1>
+</div>
+<!-- Left Space (Search area context) -->
+<div class="hidden md:flex flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full h-10 pl-12 pr-4 bg-surface-container-low border-none rounded-full font-body-md text-body-md focus:ring-1 focus:ring-primary focus:bg-surface text-on-surface placeholder:text-on-surface-variant transition-all outline-none" placeholder="Search..." type="text"/>
+</div>
+</div>
+<!-- Right Actions -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors active:scale-95 cursor-pointer">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+<!-- Profile Image -->
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-surface-container-highest cursor-pointer hover:border-primary transition-colors">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A close up, high quality studio portrait of an optimistic young adult looking gently at the camera. The lighting is soft and flattering, creating a premium light-mode aesthetic. The background is a pure, bright white, ensuring the subject stands out clearly. The image conveys trust and approachability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMDLqjnql1cf2VFXjZduD4x3oIgIX-grzCiSB-4h__cTzjtlwKfJkDxGa9zzYcRMbtIqIbrhcke23zjMlfnElxns9wkMrjYM9fsCVBen219-WUgNqel6wv_MYZR6mSYjqrW6A0MUjkDdXl_uXo_o0nuRqi4t7mNuHpCDKdlwRNzczSdm8Xuk7RkfDBjPFSSs3954f4_q7omn1KAMkJgLe3dGpJcFAlqF8QmEpftjlQ2cFPRJL59qjghQ"/>
+</div>
+</div>
+</header>
+<!-- Chat Canvas -->
+<main class="flex-1 overflow-y-auto px-4 md:px-container-padding py-stack-lg flex flex-col relative max-w-[1440px] mx-auto w-full">
+<!-- Global Status Indicator -->
+<div class="absolute top-4 right-4 md:right-container-padding flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-full shadow-sm">
+<div class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">AI Active</span>
+</div>
+<!-- Chat History Container -->
+<div class="flex-1 flex flex-col gap-stack-lg max-w-3xl mx-auto w-full pb-32">
+<!-- Welcome Empty State (Usually hidden if chat has history, shown here for composition) -->
+<!-- 
+                <div class="flex flex-col items-center justify-center h-full text-center opacity-0 pointer-events-none absolute inset-0">
+                    <div class="w-16 h-16 rounded-2xl bg-secondary-container/10 flex items-center justify-center mb-6 shadow-sm border border-secondary-container/20">
+                        <span class="material-symbols-outlined text-[32px] text-secondary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                    </div>
+                    <h2 class="font-headline-md text-headline-md text-on-surface mb-2">How can I help with your finances today?</h2>
+                    <p class="font-body-md text-body-md text-on-surface-variant max-w-md">I can track expenses, analyze spending habits, or offer budgeting advice. Try saying "I spent 15 on coffee today."</p>
+                </div>
+                -->
+<!-- User Message -->
+<div class="flex justify-end">
+<div class="bg-surface-container-high text-on-surface rounded-2xl rounded-tr-none px-6 py-4 max-w-[85%] md:max-w-[70%] shadow-sm">
+<p class="font-body-md text-body-md">Lunch at the cafe for 35k</p>
+</div>
+</div>
+<!-- AI Response & Action Card -->
+<div class="flex justify-start gap-4">
+<!-- AI Avatar -->
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-secondary-container to-tertiary-container flex items-center justify-center shadow-sm flex-shrink-0 mt-1">
+<span class="material-symbols-outlined text-white text-[20px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="flex flex-col gap-4 max-w-[85%] md:max-w-[75%]">
+<!-- AI Text Response -->
+<div class="bg-surface-container-lowest border border-outline-variant/30 text-on-surface rounded-2xl rounded-tl-none px-6 py-4 shadow-sm relative overflow-hidden">
+<!-- Subtle glowing accent -->
+<div class="absolute -top-10 -left-10 w-32 h-32 bg-secondary/10 blur-[30px] rounded-full pointer-events-none"></div>
+<p class="font-body-md text-body-md relative z-10">I've prepared that transaction for you. Does this look correct?</p>
+</div>
+<!-- Inline Transaction Card (Option B) -->
+<div class="bg-surface-container-lowest rounded-2xl p-6 shadow-[0_8px_30px_rgb(132,85,239,0.08)] border border-secondary/20 relative overflow-hidden group">
+<!-- Subtle Neomorphic AI Glow on Card -->
+<div class="absolute inset-0 bg-gradient-to-br from-secondary/5 to-transparent opacity-50 pointer-events-none"></div>
+<!-- Header -->
+<div class="flex justify-between items-start mb-6 relative z-10">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<div>
+<h3 class="font-label-md text-label-md text-on-surface mb-0.5">Food &amp; Drink</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Today</p>
+</div>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-headline-md text-on-surface">35,000</span>
+</div>
+</div>
+<!-- Context Data -->
+<div class="bg-surface-container-low rounded-xl p-4 mb-6 relative z-10">
+<div class="flex items-center gap-2 text-on-surface-variant mb-2">
+<span class="material-symbols-outlined text-[16px]">notes</span>
+<span class="font-label-sm text-label-sm">Note</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface">Lunch at the cafe</p>
+</div>
+<!-- Actions -->
+<div class="flex flex-wrap gap-3 relative z-10">
+<button class="flex-1 bg-primary text-on-primary font-label-md text-label-md py-3 px-4 rounded-full hover:bg-primary/90 transition-colors shadow-sm active:scale-95">
+                                    Confirm
+                                </button>
+<button class="flex-1 border border-outline-variant text-on-surface font-label-md text-label-md py-3 px-4 rounded-full hover:bg-surface-container-high transition-colors active:scale-95">
+                                    Edit
+                                </button>
+<button class="flex-none text-error font-label-md text-label-md py-3 px-4 rounded-full hover:bg-error-container/20 transition-colors active:scale-95">
+                                    Cancel
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Input Area -->
+<div class="absolute bottom-0 left-0 right-0 p-4 md:px-container-padding md:py-8 bg-gradient-to-t from-background via-background to-transparent pointer-events-none">
+<div class="max-w-3xl mx-auto pointer-events-auto relative">
+<!-- AI Insight Chip floating above input -->
+<div class="absolute -top-12 left-0 right-0 flex justify-center">
+<button class="bg-gradient-to-r from-surface-container-low to-secondary-fixed/30 border border-secondary/10 px-4 py-2 rounded-full flex items-center gap-2 shadow-sm hover:shadow-md transition-shadow">
+<span class="material-symbols-outlined text-[16px] text-secondary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-sm text-label-sm text-on-surface">Try: "Summarize my spending this week"</span>
+</button>
+</div>
+<div class="bg-surface-container-lowest rounded-[28px] shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-outline-variant/20 flex items-end p-2 transition-shadow focus-within:shadow-[0_8px_30px_rgb(132,85,239,0.12)] focus-within:border-secondary/30 relative overflow-hidden">
+<!-- Decorative glowing border effect -->
+<div class="absolute inset-0 border-2 border-transparent rounded-[28px] pointer-events-none opacity-0 transition-opacity focus-within:opacity-100 focus-within:border-secondary/20"></div>
+<button class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-colors flex-shrink-0 active:scale-95 mb-1">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<textarea class="flex-1 max-h-[120px] bg-transparent border-none focus:ring-0 resize-none font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant/70 py-4 px-2 outline-none" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'" placeholder="Type a transaction or ask a question..." rows="1"></textarea>
+<button class="w-12 h-12 rounded-full bg-secondary text-white flex items-center justify-center hover:bg-secondary/90 transition-colors shadow-sm flex-shrink-0 active:scale-95 mb-1 ml-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+<div class="text-center mt-3">
+<span class="font-label-sm text-label-sm text-on-surface-variant/60">AI can make mistakes. Consider verifying important financial data.</span>
+</div>
+</div>
+</div>
+</div>
+</body></html>
